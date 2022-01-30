@@ -10,7 +10,7 @@ error_chain! {
 }
 
 #[tokio::main]
-pub async fn scrape(link: String) -> Result<()> {
+pub async fn scrape(link: String, link_vec: &mut Vec<String>) -> Result<()> {
     let res = reqwest::get(link)
         .await?
         .text()
@@ -19,7 +19,7 @@ pub async fn scrape(link: String) -> Result<()> {
     Document::from(res.as_str())
         .find(Name("a"))
         .filter_map(|n| n.attr("href"))
-        .for_each(|x| println!("{}", x));
-
+        .for_each(|x| link_vec.push(x.to_string()));
+        // .for_each(|x| println!("{}", x));
     return Ok(());
 }
