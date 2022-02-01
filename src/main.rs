@@ -1,19 +1,22 @@
 mod scrape;
 
-fn main()
+#[tokio::main]
+async fn main()
 {
+    // Set up
     let args: Vec<String> = std::env::args().collect();
     let link: String = args[1].clone();
-    let depth: u8 = args[2].parse::<u8>().unwrap();
     let mut link_vec: Vec<String> = vec![];
 
-    scrape::scrape(link, &mut link_vec);
+    // Scrape
+    scrape::scrape(link, &mut link_vec)
+        .await
+        .expect("Could not scrape link!");
 
-    // Print link_vec values
+    // Print list values
     for i in link_vec.iter()
     {
         println!("{}", i);
+        // scrape::download_image(i);
     }
-
-    // Do something with the data?
 }
